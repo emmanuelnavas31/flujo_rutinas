@@ -17,7 +17,7 @@ class RutinaViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Rutina.objects.filter(usuario=self.request.user)
+        return Rutina.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save()
