@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from rutina.models import Rutina, Ejercicio
+
+admin.site.register(Rutina)
+admin.site.register(Ejercicio)
