@@ -20,5 +20,4 @@ class RutinaViewSet(viewsets.ModelViewSet):
         return Rutina.objects.filter(usuario=self.request.user)
 
     def perform_create(self, serializer):
-        serializer.save(usuario=self.request.user)
-       
+        serializer.save()

@@ -17,12 +17,20 @@ class EjercicioSerializer(serializers.ModelSerializer):
 
 
 class RutinaSerializer(serializers.ModelSerializer):
-    usuario = UserSerializer(read_only=True)
-    ejercicios = EjercicioSerializer(many=True, read_only=True)
-    ejercicios_ids = serializers.PrimaryKeyRelatedField(
-        many=True, queryset=Ejercicio.objects.all(), write_only=True, source='Ejercicios'
+    user = UserSerializer(read_only=True)
+    exercise = EjercicioSerializer(many=True, read_only=True)
+
+    exercise_ids = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=Ejercicio.objects.all(), write_only=True, source='exercise'
     )
 
     class Meta:
         model = Rutina
-        fields = ['id', 'usuario', 'nombre', 'hora', 'dias', 'ejercicios', 'ejercicios_ids']
+        fields = ['id', 'user', 'name', 'time', 'days', 'exercise', 'exercise_ids']
+
+    def create(self, validated_data):
+        exercises = validated_data.pop('exercise', [])
+        user = self.context['request'].user
+        rutina = Rutina.objects.create(user=user, **validated_data)
+        rutina.exercise.set(exercises)
+        return rutina
